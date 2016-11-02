@@ -46,9 +46,6 @@ client.on("message", function(message) {
 
             **Admin shit**
 
-
-            \`!group admin <group>\` - Group required for admin shit
-            \`!group bans\` - Shows all banned groups
             \`!group ban <group>\` - bans a specific group
             \`!group unban <group>\` - unbans a specific group
 
@@ -59,20 +56,6 @@ client.on("message", function(message) {
             \`!group leave <group>\` - Joins a group
 
         Shout at **Midge** if its broken`)
-    })
-
-    command('!group admin ', message, function(err, group) {
-        var role
-        message.guild.roles.map(r => {
-            if(r.name === group) {
-                role = r
-            }
-        })
-
-        if(!role) {
-            message.reply('invalid group')
-        }
-
     })
 
     command('!group bans', message, function(err, arg) {
@@ -139,7 +122,7 @@ client.on("message", function(message) {
         var role
 
         var availableRoles = message.guild.roles.filter(function(item) {
-            if(item.name == group) {
+            if(item.name.toLowerCase() == group.toLowerCase()) {
                 role = item;
             }
             return (allowedRoles.indexOf(item.name) !== -1)
@@ -170,7 +153,7 @@ client.on("message", function(message) {
        var role
 
         var availableRoles = message.guild.roles.filter(function(item) {
-            if(item.name == group) {
+            if(item.name.toLowerCase() == group.toLowerCase()) {
                 role = item;
             }
             return (allowedRoles.indexOf(item.name) !== -1)
