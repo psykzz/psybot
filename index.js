@@ -135,8 +135,8 @@ client.on("message", function(message) {
             return
         }
 
-        if(availableRoles.indexOf(group) === -1 || !role) {
-            message.reply('Group is not whitelisted or is invalid')
+        if(availableRoles.indexOf(role.name) === -1 || !role) {
+            message.reply('group is not whitelisted or is invalid')
             return
         }
 
@@ -166,7 +166,7 @@ client.on("message", function(message) {
             return
         }
 
-        if(availableRoles.indexOf(group) === -1 || !role) {
+        if(availableRoles.indexOf(role.name) === -1 || !role) {
             message.reply('invalid group')
             return
         }
