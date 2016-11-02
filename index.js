@@ -37,7 +37,7 @@ function command(prefix, message, cb) {
 
 client.on("message", function(message) {
 
-    if(message.author.bot) {
+    if(message.author.bot || message.channel.isPrivate) {
         return;
     }
 
