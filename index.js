@@ -202,7 +202,7 @@ client.on("message", function(message) {
 client.login(token).then(token => {
     console.log('Successfully logged in');
     client.user.setGame('with Midge\'s mum');
-    client.user.setUsername('BatBot')
-     .then(user => console.log(`My new username is ${user.username}`))
+    client.user.setUsername('GroupBot')
+     .then(user => console.log(`Updated username: ${user.username}`))
      .catch(console.log);
 }).catch(error => console.log('There was an error logging in: ' + error));
