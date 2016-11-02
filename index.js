@@ -9,17 +9,16 @@ var options = {
 var client = new Discord.Client(options);
 var token = process.env.DISCORD_TOKEN
 
-var bannedGroups = [];
-fs.readFile('./data/bannedRoles.json', 'utf8', function (err, data) {
+var allowedRoles = [];
+fs.readFile('./data/allowedRoles.json', 'utf8', function (err, data) {
     if (err) {
-        bannedGroups = [];
+        allowedRoles = [];
         return
     } // we'll not consider error handling for now
-    bannedGroups = JSON.parse(data);
+    allowedRoles = JSON.parse(data);
 });
 
 client.on('message', function(message) {
-    // console.log(message);
     if (message.channel.isPrivate) {
             console.log(`(Private) ${message.author.name}: ${message.content}`);
     } else {
@@ -37,6 +36,10 @@ function command(prefix, message, cb) {
 }
 
 client.on("message", function(message) {
+
+    if(message.author.bot) {
+        return;
+    }
 
     command('!group help', message, function(e, _) {
         message.reply(`**GROUP HELP**
@@ -73,50 +76,51 @@ client.on("message", function(message) {
     })
 
     command('!group bans', message, function(err, arg) {
-        message.reply(bannedGroups.join(', '))
+        return; // no longer needed
+        message.reply(allowedRoles.join(', '))
     })
-    command('!group ban ', message, function(err, group) {
+    command('!group unban ', message, function(err, group) {
 
         if(!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
             message.reply('fu skrub no access for you')
         }
 
         var availableRoles = message.guild.roles.filter(function(item) {
-            return (bannedGroups.indexOf(item.name) === -1)
+            return (allowedRoles.indexOf(item.name) !== -1)
         }).map(function(item) {
             return item.name
         })
 
-        if(availableRoles.indexOf(group) === -1) {
+        if(availableRoles.indexOf(group) !== -1) {
             message.reply("incorrect group.")
             return
         }
 
-        bannedGroups.push(group)
-        fs.writeFile('./data/bannedRoles.json', JSON.stringify(bannedGroups) , 'utf-8');
-        message.reply(`banned ${group}`)
+        allowedRoles.push(group)
+        fs.writeFile('./data/allowedRoles.json', JSON.stringify(allowedRoles) , 'utf-8');
+        message.reply(`unbanned ${group}`)
     });
-    command('!group unban ', message, function(err, arg) {
+    command('!group ban ', message, function(err, arg) {
 
         if(!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
             message.reply('fu skrub no access for you')
         }
 
-        var index = bannedGroups.indexOf(arg);
+        var index = allowedRoles.indexOf(arg);
         if (index === -1) {
             message.reply("incorrect group.")
             return
         }
-        bannedGroups.splice(index, 1);
 
-        fs.writeFile('./data/bannedRoles.json', JSON.stringify(bannedGroups) , 'utf-8');
-        message.reply(`unbanned ${arg}`)
+        allowedRoles.splice(index, 1);
+        fs.writeFile('./data/allowedRoles.json', JSON.stringify(allowedRoles) , 'utf-8');
+        message.reply(`banned ${arg}`)
     });
 
     command('!groups', message, function(err) {
 
         var availableRoles = message.guild.roles.filter(function(item) {
-            return (bannedGroups.indexOf(item.name) === -1)
+            return (allowedRoles.indexOf(item.name) !== -1)
         }).map(function(item) {
             return item.name
         })
@@ -138,7 +142,7 @@ client.on("message", function(message) {
             if(item.name == group) {
                 role = item;
             }
-            return (bannedGroups.indexOf(item.name) === -1)
+            return (allowedRoles.indexOf(item.name) !== -1)
         }).map(function(item) {
             return item.name
         })
@@ -149,7 +153,7 @@ client.on("message", function(message) {
         }
 
         if(availableRoles.indexOf(group) === -1 || !role) {
-            message.reply('invalid group')
+            message.reply('Group is not whitelisted or is invalid')
             return
         }
 
@@ -169,7 +173,7 @@ client.on("message", function(message) {
             if(item.name == group) {
                 role = item;
             }
-            return (bannedGroups.indexOf(item.name) === -1)
+            return (allowedRoles.indexOf(item.name) !== -1)
         }).map(function(item) {
             return item.name
         })
