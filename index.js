@@ -68,28 +68,44 @@ client.on("message", function(message) {
             message.reply('fu skrub no access for you')
         }
 
+        var role;
+        
         var availableRoles = message.guild.roles.filter(function(item) {
+            if(item.name.toLowerCase() == group.toLowerCase()) {
+                role = item;
+            }
             return (allowedRoles.indexOf(item.name) !== -1)
         }).map(function(item) {
             return item.name
         })
 
-        if(availableRoles.indexOf(group) !== -1) {
+        if(availableRoles.indexOf(role.name) !== -1) {
             message.reply("incorrect group.")
             return
         }
 
         allowedRoles.push(group)
         fs.writeFile('./data/allowedRoles.json', JSON.stringify(allowedRoles) , 'utf-8');
-        message.reply(`unbanned ${group}`)
+        message.reply(`unbanned ${role.name}`)
     });
-    command('!group ban ', message, function(err, arg) {
+    command('!group ban ', message, function(err, group) {
 
         if(!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
             message.reply('fu skrub no access for you')
         }
-
-        var index = allowedRoles.indexOf(arg);
+    
+        var role;
+        
+        var availableRoles = message.guild.roles.filter(function(item) {
+            if(item.name.toLowerCase() == group.toLowerCase()) {
+                role = item;
+            }
+            return (allowedRoles.indexOf(item.name) !== -1)
+        }).map(function(item) {
+            return item.name
+        })
+        
+        var index = allowedRoles.indexOf(role.name);
         if (index === -1) {
             message.reply("incorrect group.")
             return
@@ -97,7 +113,7 @@ client.on("message", function(message) {
 
         allowedRoles.splice(index, 1);
         fs.writeFile('./data/allowedRoles.json', JSON.stringify(allowedRoles) , 'utf-8');
-        message.reply(`banned ${arg}`)
+        message.reply(`banned ${role.name}`)
     });
 
     command('!groups', message, function(err) {
