@@ -84,7 +84,7 @@ client.on("message", function(message) {
             return
         }
 
-        allowedRoles.push(group)
+        allowedRoles.push(role.name)
         fs.writeFile('./data/allowedRoles.json', JSON.stringify(allowedRoles) , 'utf-8');
         message.reply(`unbanned ${role.name}`)
     });
