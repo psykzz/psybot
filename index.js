@@ -20,12 +20,12 @@ fs.readFile('./data/allowedRoles.json', 'utf8', function (err, data) {
 
 client.on('message', function(message) {
     if (message.channel.type != 'text') {
-            console.log(`(Private) ${message.author.name}: ${message.content}`);
+            console.log(`(Private) ${this.recipient.name}: ${message.content}`);
     } else {
         try {
             console.log(`(- ${message.channel.guild.name} / #${message.channel.name}) ${message.author.username}: ${message.content}`);
         } catch (err) {
-            console.log(`(- !!(Private) ${message.author.name}: ${message.content}`);
+            console.log(`(- ERR!! (Private) ${message.author.name || message.recipient.name}: ${message.content}`);
         }
     }
 });
