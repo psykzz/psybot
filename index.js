@@ -19,7 +19,7 @@ fs.readFile('./data/allowedRoles.json', 'utf8', function (err, data) {
 });
 
 client.on('message', function(message) {
-    if (message.isPrivate) {
+    if (message.channel.type != 'text') {
             console.log(`(Private) ${message.author.name}: ${message.content}`);
     } else {
         try {
@@ -41,7 +41,7 @@ function command(prefix, message, cb) {
 
 client.on("message", function(message) {
 
-    if(message.author.bot || message.channel.isPrivate) {
+    if(message.author.bot || message.channel.type != 'text') {
         return;
     }
 
