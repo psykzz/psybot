@@ -1,11 +1,10 @@
 'use strict';
-var fs = require('fs');
 var slug = require('slug');
 var debug = require('debug')('PsyBot');
 var async = require('async');
 var PsyBot = require('./src/psy-bot');
 
-var token = process.env.DISCORD_TOKEN
+var token = process.env.DISCORD_TOKEN;
 var bot = new PsyBot(token);
 
 // Example command
@@ -301,7 +300,7 @@ bot.addCommands([
         },
       ], (err) => {
         if (err) {
-          debug("An error occurred", err)
+          debug("An error occurred", err);
         }
 
         allowedRoles.push(slug(group));
@@ -309,70 +308,7 @@ bot.addCommands([
 
         debug("Text and voice channels created");
         message.reply(`Created the channels and group for ${group}`);
-      })
-      //
-      // var everyoneRole = message.guild.roles.find('name', '@everyone');
-      // var roleExists = message.guild.roles.exists('name', groupSlug);
-      // var newRole;
-      // if (!roleExists) {
-      //   message.guild.createRole({name: groupSlug, mentionable: false})
-      //   .then((role) => {
-      //     message.member.addRole(role);
-      //     debug(`Adding ${message.author.name} to ${role.name}`);
-      //     newRole = role;
-      //   }).catch(debug);
-      // } else {
-      //   var newRole = message.guild.roles.find('name', groupSlug);
-      // }
-      //
-      // var textChanExists = message.guild.channels.some(channel => {
-      //   return channel.name === groupSlug && channel.type === 'text';
-      // });
-      //
-      // if (!textChanExists) {
-      //   var textChan = message.guild.createChannel(groupSlug, 'text')
-      //   .then(chan => {
-      //     debug("Created text channel", chan.name);
-      //     chan.overwritePermissions(everyoneRole, {
-      //         READ_MESSAGES: false,
-      //         SEND_MESSAGES: false,
-      //     })
-      //     .then(() => console.log('Everyone restricted on new text channel!'))
-      //     .catch(debug);
-      //     chan.overwritePermissions(newRole, {
-      //         READ_MESSAGES: true,
-      //         SEND_MESSAGES: true,
-      //     })
-      //     .then(() => console.log('Role set on new text channel!'))
-      //     .catch(debug);
-      //   })
-      //   .catch(err => debug("error creating a text channel", err));
-      // }
-      //
-      // var voiceChanExists = message.guild.channels.some(channel => {
-      //   return channel.name === groupSlug && channel.type === 'voice';
-      // });
-      //
-      // if (!voiceChanExists) {
-      //   var voiceChan = message.guild.createChannel(groupSlug, 'voice')
-      //   .then(chan => {
-      //     debug("Created voice channel", chan.name);
-      //     chan.overwritePermissions(everyoneRole, {
-      //       CONNECT: false,
-      //       SPEAK: false,
-      //     })
-      //     .then(() => console.log('Everyone restricted to new voice channel!'))
-      //     .catch(debug);
-      //     chan.overwritePermissions(newRole, {
-      //       CONNECT: true,
-      //       SPEAK: true,
-      //     })
-      //     .then(() => console.log('Role set on new voice channel!'))
-      //     .catch(debug);
-      //   })
-      //   .catch(err => debug("error creating a voice channel", err));
-      // }
-
+      });
     },
   },
 ]);
