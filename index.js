@@ -16,7 +16,35 @@ var bot = new PsyBot(token);
 }
 */
 
+
+/* Setup Twitter */
+
+var Twitter = require('twitter');
+var twitter = new Twitter({
+  consumer_key: process.env.CONSUMER_KEY,
+  consumer_secret: process.env.CONSUMER_SECRET,
+  access_token_key: process.env.ACCESS_TOKEN_KEY,
+  access_token_secret: process.env.ACCESS_TOKEN_SECRET
+});
+
 bot.addCommands([
+  {
+    prefix: '!psybot tweet',
+    args: true,
+    callback: (bot, message, update) => {
+      var requiredRole = 'twitter';
+      var canTwitter = message.member.roles.exists('name', requiredRole);
+      if(!canTwitter) {
+        return message.reply(`You don't have the '${requiredRole}' role.`);
+      }
+      twitter.post('statuses/update', {status: update},  function(error) {
+        if(error) {
+          console.log(error);
+          return;
+        }
+      });
+    }
+  },
   {
     prefix: '!psybot setname',
     args: true,
