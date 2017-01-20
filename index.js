@@ -42,6 +42,7 @@ bot.addCommands([
           console.log(error);
           return;
         }
+        message.reply('sent.');
       });
     }
   },
