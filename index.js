@@ -49,6 +49,9 @@ bot.addCommands([
     prefix: '!psybot setname',
     args: true,
     callback: (bot, message, newName) => {
+      if (!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
+        message.reply('fu skrub no access for you');
+      }
       bot.client.user.setUsername(newName)
       .then(user => debug(`Updated username: ${user.username}`))
       .catch(err => debug(`Error updating username: ${err}`));
@@ -58,6 +61,9 @@ bot.addCommands([
     prefix: '!psybot setgame',
     args: true,
     callback: (bot, message, args) => {
+      if (!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
+        message.reply('fu skrub no access for you');
+      }
       bot.client.user.setGame(args)
       .then(debug(`Updated game: ${args}`))
       .catch(err => debug(`Error updating game: ${err}`));
@@ -113,7 +119,6 @@ bot.addCommands([
     prefix: '!psybot group ban',
     args: true,
     callback: (bot, message, group) => {
-
       if (!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
         message.reply('fu skrub no access for you');
       }
