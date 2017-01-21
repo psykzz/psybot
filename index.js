@@ -27,7 +27,37 @@ var twitter = new Twitter({
   access_token_secret: process.env.ACCESS_TOKEN_SECRET
 });
 
+var CLEANUP_TIMEOUT = 1500;
+function cleanReply(message, text, timeout) {
+  timeout = timeout || CLEANUP_TIMEOUT;
+  message.reply(text)
+  .then(msg => {
+    msg.delete(timeout);
+    message.delete(timeout);
+  });
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
 bot.addCommands([
+  // {
+  //   prefix: '!hentai',
+  //   callback: (bot, message) => {
+  //
+  //     var image = getRandomInt(1000000, 9999999);
+  //     var url = `https://ibsearch.xxx/images/${image}#image`;
+  //     cleanReply(message, url, 15000);
+  //   }
+  // },
+  {
+    prefix: '!centai',
+    callback: (bot, message) => {
+      cleanReply(message, "https://ibsearch.xxx/images/3622568#image", 15000);
+    }
+  },
   {
     prefix: '!psybot tweet',
     args: true,
@@ -42,7 +72,7 @@ bot.addCommands([
           console.log(error);
           return;
         }
-        message.reply('sent.');
+        cleanReply(message, 'Tweet sent');
       });
     }
   },
