@@ -27,15 +27,7 @@ var twitter = new Twitter({
   access_token_secret: process.env.ACCESS_TOKEN_SECRET
 });
 
-var CLEANUP_TIMEOUT = 1500;
-function cleanReply(message, text, timeout) {
-  timeout = timeout || CLEANUP_TIMEOUT;
-  message.reply(text)
-  .then(msg => {
-    msg.delete(timeout);
-    message.delete(timeout);
-  });
-}
+
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -43,46 +35,41 @@ function getRandomInt(min, max) {
 
 
 bot.addCommands([
+
   // {
   //   prefix: '!hentai',
   //   callback: (bot, message) => {
   //
   //     var image = getRandomInt(1000000, 9999999);
   //     var url = `https://ibsearch.xxx/images/${image}#image`;
-  //     cleanReply(message, url, 15000);
+  //     bot.cleanReply(message, url, 15000);
   //   }
   // },
   {
     prefix: '!centai',
     callback: (bot, message) => {
-      cleanReply(message, "https://ibsearch.xxx/images/3622568#image", 15000);
+      bot.cleanReply(message, "https://ibsearch.xxx/images/3622568#image", 15000);
     }
   },
   {
     prefix: '!psybot tweet',
     args: true,
+    requiredRole: 'twitter',
     callback: (bot, message, update) => {
-      var requiredRole = 'twitter';
-      var canTwitter = message.member.roles.exists('name', requiredRole);
-      if(!canTwitter) {
-        return message.reply(`You don't have the '${requiredRole}' role.`);
-      }
       twitter.post('statuses/update', {status: update},  function(error) {
         if(error) {
-          console.log(error);
+          debug(error);
           return;
         }
-        cleanReply(message, 'Tweet sent');
+        bot.cleanReply(message, 'Tweet sent');
       });
     }
   },
   {
     prefix: '!psybot setname',
     args: true,
+    requiredPermissions: ['MANAGE_ROLES_OR_PERMISSIONS'],
     callback: (bot, message, newName) => {
-      if (!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
-        cleanReply(message, 'fu skrub no access for you');
-      }
       bot.client.user.setUsername(newName)
       .then(user => debug(`Updated username: ${user.username}`))
       .catch(err => debug(`Error updating username: ${err}`));
@@ -91,10 +78,8 @@ bot.addCommands([
   {
     prefix: '!psybot setgame',
     args: true,
+    requiredPermissions: ['MANAGE_ROLES_OR_PERMISSIONS'],
     callback: (bot, message, args) => {
-      if (!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
-        cleanReply(message, 'fu skrub no access for you');
-      }
       bot.client.user.setGame(args)
       .then(debug(`Updated game: ${args}`))
       .catch(err => debug(`Error updating game: ${err}`));
@@ -122,10 +107,8 @@ bot.addCommands([
   {
     prefix: '!psybot group unban',
     args: true,
+    requiredPermissions: ['MANAGE_ROLES_OR_PERMISSIONS'],
     callback: (bot, message, group) => {
-      if (!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
-        cleanReply(message, 'fu skrub no access for you');
-      }
       group = slug(group);
       var allowedRoles = bot.config.get('allowedRoles', []);
 
@@ -149,10 +132,8 @@ bot.addCommands([
   {
     prefix: '!psybot group ban',
     args: true,
+    requiredPermissions: ['MANAGE_ROLES_OR_PERMISSIONS'],
     callback: (bot, message, group) => {
-      if (!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
-        cleanReply(message, 'fu skrub no access for you');
-      }
       group = slug(group);
       var allowedRoles = bot.config.get('allowedRoles', []);
 
@@ -258,11 +239,8 @@ bot.addCommands([
   {
     prefix: '!psybot group create',
     args: true,
+    requiredPermissions: ['MANAGE_ROLES_OR_PERMISSIONS'],
     callback: (bot, message, group) => {
-      if (!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
-           cleanReply(message, 'fu skrub no access for you');
-       }
-
       var allowedRoles = bot.config.get('allowedRoles', []);
       var groupSlug = slug(group);
 

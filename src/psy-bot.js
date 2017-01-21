@@ -52,8 +52,16 @@ class PsyBot {
     });
   }
 
+  cleanReply(message, text, timeout) {
+    timeout = timeout || 3000;
+    message.reply(text)
+    .then(msg => {
+      msg.delete(timeout);
+      message.delete(timeout);
+    });
+  }
+
   parseCommand(message, cmd) {
-    debug('[ParseCommand] handling', cmd);
     var msg = message.content.trim();
 
     // Must start with the prefix
@@ -62,8 +70,22 @@ class PsyBot {
     if (msg.indexOf(cmd.prefix) !== 0 ||
       cmd.args === true && msg === cmd.prefix ||
       cmd.args === false && msg !== cmd.prefix) {
-      debug('[ParseCommand] failed matching');
       return;
+    }
+
+    // Check permission
+    if(cmd.requiredPermissions) {
+      if (!message.member.hasPermissions(cmd.requiredPermissions)) {
+        return this.cleanReply(message, `You don't have the '${cmd.requiredPermissions.toString()}' permissions`);
+      }
+    }
+
+    // Check role based permissions
+    if(cmd.requiredRole) {
+      var canTwitter = message.member.roles.exists('name', cmd.requiredRole);
+      if(!canTwitter) {
+        return this.cleanReply(message, `You don't have the '${cmd.requiredRole}' role.`);
+      }
     }
 
     var restOfMessage = null;
