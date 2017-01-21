@@ -81,7 +81,7 @@ bot.addCommands([
     args: true,
     callback: (bot, message, newName) => {
       if (!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
-        message.reply('fu skrub no access for you');
+        cleanReply(message, 'fu skrub no access for you');
       }
       bot.client.user.setUsername(newName)
       .then(user => debug(`Updated username: ${user.username}`))
@@ -93,7 +93,7 @@ bot.addCommands([
     args: true,
     callback: (bot, message, args) => {
       if (!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
-        message.reply('fu skrub no access for you');
+        cleanReply(message, 'fu skrub no access for you');
       }
       bot.client.user.setGame(args)
       .then(debug(`Updated game: ${args}`))
@@ -124,7 +124,7 @@ bot.addCommands([
     args: true,
     callback: (bot, message, group) => {
       if (!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
-        message.reply('fu skrub no access for you');
+        cleanReply(message, 'fu skrub no access for you');
       }
       group = slug(group);
       var allowedRoles = bot.config.get('allowedRoles', []);
@@ -151,7 +151,7 @@ bot.addCommands([
     args: true,
     callback: (bot, message, group) => {
       if (!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
-        message.reply('fu skrub no access for you');
+        cleanReply(message, 'fu skrub no access for you');
       }
       group = slug(group);
       var allowedRoles = bot.config.get('allowedRoles', []);
@@ -260,7 +260,7 @@ bot.addCommands([
     args: true,
     callback: (bot, message, group) => {
       if (!message.member.hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) {
-           message.reply('fu skrub no access for you');
+           cleanReply(message, 'fu skrub no access for you');
        }
 
       var allowedRoles = bot.config.get('allowedRoles', []);
