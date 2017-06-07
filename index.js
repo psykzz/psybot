@@ -37,6 +37,17 @@ function getRandomInt(min, max) {
 
 bot.addCommands([
   {
+    prefix: "!psybot help",
+    callback: (bot, message) => {
+      var reply = "```" ;
+      bot.commands.forEach(cmd => {
+        reply += `  ${cmd.prefix} - ${cmd.help}`;
+      });
+      reply += "```";
+      bot.reply(message, reply);
+    }
+  },
+  {
     prefix: "!prune",
     args: /^ (\d+)?.*$/,
     callback: (bot, message, limit) => {

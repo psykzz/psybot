@@ -114,7 +114,6 @@ class PsyBot {
       return;
     }
 
-
     self.commands.push(cmd);
   }
 
