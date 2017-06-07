@@ -41,10 +41,11 @@ bot.addCommands([
     callback: (bot, message) => {
       var reply = "```" ;
       bot.commands.forEach(cmd => {
-        reply += `  ${cmd.prefix} - ${cmd.help}`;
+        reply += `  ${cmd.prefix} - ${cmd.help}
+        `;
       });
       reply += "```";
-      bot.reply(message, reply);
+      bot.reply(message, reply, 30000);
     }
   },
   {

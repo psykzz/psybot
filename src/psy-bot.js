@@ -62,6 +62,7 @@ class PsyBot {
   }
 
   parseCommand(message, cmd) {
+    message.channel.startTyping();
     var msg = message.content.trim();
 
     // Must start with the prefix
@@ -100,7 +101,9 @@ class PsyBot {
       }
     }
 
-    return cmd.callback(this, message, restOfMessage);
+    var response = cmd.callback(this, message, restOfMessage);
+    message.channel.stopTyping();
+    return response;
   }
 
   addCommands(commands) {
