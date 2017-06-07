@@ -62,7 +62,6 @@ class PsyBot {
   }
 
   parseCommand(message, cmd) {
-    message.channel.startTyping();
     var msg = message.content.trim();
 
     // Must start with the prefix
@@ -86,6 +85,7 @@ class PsyBot {
         return this.reply(message, `You don't have the '${cmd.requiredRole}' role.`);
       }
     }
+    message.channel.startTyping();
 
     var restOfMessage = null;
     if (cmd.args) {
