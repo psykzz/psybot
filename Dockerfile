@@ -1,7 +1,7 @@
 FROM mhart/alpine-node:6
-RUN mkdir -p ./data
 
 WORKDIR /src
+RUN mkdir -p ./data
 ADD package.json .
 RUN npm install
 ADD . .
