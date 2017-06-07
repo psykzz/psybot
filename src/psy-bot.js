@@ -28,10 +28,10 @@ class PsyBot {
   setupHandlers() {
     if (!this.options.disableMessageLogging) {
       this.client.on('message', (message) => {
-        if (message.type === 'dm') {
-          debug(`(Private) ${message.author.name}: ${message.content}`);
-        } else {
+        if (message.guild && message.channel) {
           debug(`(- ${message.guild.name} / #${message.channel.name}) ${message.author.username}: ${message.content}`);
+        } else {
+          debug(`(Private) ${message.author.username}: ${message.content}`);
         }
       });
     }
@@ -52,8 +52,8 @@ class PsyBot {
     });
   }
 
-  cleanReply(message, text, timeout) {
-    timeout = timeout || 3000;
+  reply(message, text, timeout) {
+    timeout = timeout || 5000;
     message.reply(text)
     .then(msg => {
       msg.delete(timeout);
@@ -76,15 +76,13 @@ class PsyBot {
     // Check permission
     if(cmd.requiredPermissions) {
       if (!message.member.hasPermissions(cmd.requiredPermissions)) {
-        return this.cleanReply(message, `You don't have the '${cmd.requiredPermissions.toString()}' permissions`);
+        return this.reply(message, `You don't have the '${cmd.requiredPermissions.toString()}' permissions`);
       }
     }
-
-    // Check role based permissions
-    if(cmd.requiredRole) {
-      var canTwitter = message.member.roles.exists('name', cmd.requiredRole);
-      if(!canTwitter) {
-        return this.cleanReply(message, `You don't have the '${cmd.requiredRole}' role.`);
+    else if(cmd.requiredRole) { // Check role based permissions
+      var role = message.member.roles.exists('name', cmd.requiredRole);
+      if(!role) {
+        return this.reply(message, `You don't have the '${cmd.requiredRole}' role.`);
       }
     }
 
@@ -126,7 +124,7 @@ class PsyBot {
   }
 
   login(token) {
-    this.client.login(token).then(token => {
+    this.client.login(token).then(() => {
       debug('Successfully logged in');
 
       this.client.user.setGame('with Midge\'s mum');

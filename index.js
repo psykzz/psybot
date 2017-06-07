@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config();
 var slug = require('slug');
 var debug = require('debug')('PsyBot');
 var async = require('async');
@@ -35,33 +36,52 @@ function getRandomInt(min, max) {
 
 
 bot.addCommands([
+  {
+    prefix: "!prune",
+    args: /^ (\d+)?.*$/,
+    callback: (bot, message, limit) => {
+      debug("Regex matching", limit);
+      var usersToPrune = message.mentions.users;
+      message.delete(); // delete the original prune message
+      message.channel.fetchMessages({limit: limit[1]})
+       .then(messages => {
+         debug(`Searching through ${message.size}`);
+         messages.forEach(msg => {
+           if(usersToPrune.exists('username', msg.author.username)) {
+             msg.delete();
+           }
+         });
+       }).catch(debug);
+    }
+  },
+  {
+    prefix: '!hentai',
+    callback: (bot, message) => {
 
-  // {
-  //   prefix: '!hentai',
-  //   callback: (bot, message) => {
-  //
-  //     var image = getRandomInt(1000000, 9999999);
-  //     var url = `https://ibsearch.xxx/images/${image}#image`;
-  //     bot.cleanReply(message, url, 15000);
-  //   }
-  // },
+      var image = getRandomInt(1000000, 9999999);
+      var url = `https://ibsearch.xxx/images/${image}#image`;
+      bot.reply(message, url, 15000);
+    }
+  },
   {
     prefix: '!centai',
     callback: (bot, message) => {
-      bot.cleanReply(message, "https://ibsearch.xxx/images/3622568#image", 15000);
+      bot.reply(message, "https://ibsearch.xxx/images/3622568#image", 15000);
     }
   },
   {
     prefix: '!psybot tweet',
     args: true,
+    requiredPermissions: ['MANAGE_ROLES_OR_PERMISSIONS'],
     requiredRole: 'twitter',
     callback: (bot, message, update) => {
-      twitter.post('statuses/update', {status: update},  function(error) {
+      twitter.post('statuses/update', {status: update},  function(error, tweet) {
+        debug(tweet);
         if(error) {
           debug(error);
           return;
         }
-        bot.cleanReply(message, 'Tweet sent');
+        bot.reply(message, 'Tweet sent');
       });
     }
   },
@@ -120,13 +140,13 @@ bot.addCommands([
       });
 
       if (availableRoles.indexOf(group) === -1) {
-        message.reply('group is not valid or already unbanned');
+        bot.reply(message, 'group is not valid or already unbanned');
         return;
       }
 
       allowedRoles.push(group);
       bot.config.set('allowedRoles', allowedRoles);
-      message.reply(`you have unbanned the group ${group}`);
+      bot.reply(message, `you have unbanned the group ${group}`);
     },
   },
   {
@@ -160,11 +180,11 @@ bot.addCommands([
       });
 
       if (!availableRoles.length) {
-        message.reply('none of the groups have been allowed yet.');
+        bot.reply(message, 'none of the groups have been allowed yet.');
         return;
       }
 
-      message.reply(`you can join the following groups with !psybot group join <group> \n` + availableRoles.join(', '));
+      bot.reply(message, `you can join the following groups with !psybot group join <group> \n` + availableRoles.join(', '));
     },
   },
   {
@@ -185,17 +205,17 @@ bot.addCommands([
       });
 
       if (!availableRoles.length) {
-        message.reply('none of the groups have been allowed yet.');
+        bot.reply(message, 'none of the groups have been allowed yet.');
         return;
       }
 
       if(availableRoles.indexOf(role.name) === -1 || !role) {
-        message.reply('that group is not whitelisted or isn\'t available.');
+        bot.reply(message, 'that group is not whitelisted or isn\'t available.');
         return;
       }
 
       message.member.addRole(role).then(() => {
-          message.reply(`you\'ve been granted the \`${role.name}\` role`);
+          bot.reply(message, `you\'ve been granted the \`${role.name}\` role`);
       }).catch(e => {
           debug(e);
       });
@@ -219,18 +239,18 @@ bot.addCommands([
       });
 
       if (!availableRoles.length) {
-        message.reply('none of the groups have been allowed yet.');
+        bot.reply(message, 'none of the groups have been allowed yet.');
         return;
       }
 
       if(availableRoles.indexOf(role.name) === -1 || !role) {
-        message.reply('that group is not whitelisted or isn\'t available.');
+        bot.reply(message, 'that group is not whitelisted or isn\'t available.');
         return;
       }
 
       // A user can "attempt" to remove a role they don't have and the bot will report its working.
       message.member.removeRole(role).then(() => {
-          message.reply(`the \`${role.name}\` role has been removed.`);
+          bot.reply(message, `the \`${role.name}\` role has been removed.`);
       }).catch(e => {
           debug(e);
       });
@@ -349,7 +369,7 @@ bot.addCommands([
         bot.config.set('allowedRoles', allowedRoles);
 
         debug("Text and voice channels created");
-        message.reply(`Created the channels and group for ${group}`);
+        bot.reply(message, `Created the channels and group for ${group}`);
       });
     },
   },

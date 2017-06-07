@@ -4,15 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env DEBUG=* node index.js",
+    "start": "nodemon -r dotenv/config index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "async": "^2.1.4",
-    "cross-env": "^3.1.4",
     "discord.js": "^11.0.0",
+    "dotenv": "^4.0.0",
+    "nodemon": "^1.11.0",
     "slug": "^0.9.1",
     "twitter": "^1.7.0"
   }

@@ -15,7 +15,7 @@ class FSConfig {
   get(key, _default) {
     if (this.data[key] === undefined && _default !== undefined) {
       this.set(key, _default);
-      return this.get(key)
+      return this.get(key);
     }
     return this.data[key];
   }
@@ -33,7 +33,7 @@ class FSConfig {
   load(path, encoding) {
     path = path || this.dataPath;
     encoding = encoding || 'utf8';
-    debug("Loading config", path, encoding)
+    debug("Loading config", path, encoding);
     return JSON.parse(fs.readFileSync(path, encoding));
   }
 
@@ -41,7 +41,7 @@ class FSConfig {
     path = path || this.dataPath;
     encoding = encoding || 'utf8';
     data = data || this.data;
-    debug("Saving config", path, encoding, data)
+    debug("Saving config", path, encoding, data);
     return fs.writeFileSync(path, JSON.stringify(data), encoding);
   }
 }
