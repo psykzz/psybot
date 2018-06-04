@@ -1,5 +1,5 @@
-# Discord group / role manager
+# Discord bot
 
 
 Link to docker repo
-https://hub.docker.com/r/psykzz/discord-groupbot
+https://hub.docker.com/r/psykzz/psybot
