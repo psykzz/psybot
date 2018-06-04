@@ -50,6 +50,17 @@ class PsyBot {
       });
 
     });
+    
+    // Update server playing list
+    this.client.on("guildCreate", guild => {
+      console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
+      this.client.user.setGame(`on ${client.guilds.size} Servers`);
+    });
+
+    this.client.on("guildDelete", guild => {
+      console.log(`Remove from: ${guild.name} (id: ${guild.id})`);
+      this.client.user.setGame(`on ${client.guilds.size} Servers`);
+    });
   }
 
   reply(message, text, timeout) {
@@ -108,7 +119,7 @@ class PsyBot {
 
   addCommands(commands) {
     var self = this;
-    commands.forEach((cmd) => self.addCommand(self, cmd));
+    commands.forEach(cmd => self.addCommand(self, cmd));
   }
 
   addCommand(self, cmd) {
@@ -129,8 +140,8 @@ class PsyBot {
     this.client.login(token).then(() => {
       debug('Successfully logged in');
 
-      this.client.user.setGame('with Midge\'s mum');
-      this.client.user.setUsername('PsyBot')
+      this.client.user.setGame('on x Servers');
+      this.client.user.setUsername('HeiHei')
       .then(user => debug(`Updated username: ${user.username}`))
       .catch(debug);
     })
