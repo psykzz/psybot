@@ -2,11 +2,10 @@
 require('dotenv').config();
 require('debug').enable('PsyBot');
 var debug = require('debug')('PsyBot');
-var token = process.env.DISCORD_TOKEN;
-
 
 var PsyBot = require('./src/psy-bot');
 
+var token = process.env.DISCORD_TOKEN;
 var bot = new PsyBot(token);
 
 bot.addCommands([
