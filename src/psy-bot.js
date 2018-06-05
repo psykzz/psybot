@@ -59,17 +59,33 @@ class PsyBot {
 
     this.client.on("guildDelete", guild => {
       console.log(`Remove from: ${guild.name} (id: ${guild.id})`);
-      this.client.user.setGame(`on ${client.guilds.size} Servers`);
+      this.client.user.setGame(`on ${this.client.guilds.size} Servers`);
     });
   }
 
   reply(message, text, timeout) {
     timeout = timeout || 5000;
-    message.reply(text)
+    return message.reply(text)
     .then(msg => {
-      msg.delete(timeout);
+      if (timeout < 1) {
+        return msg;
+      }
       message.delete(timeout);
+      return msg.delete(timeout);
     });
+  }
+
+  async privateMsg(message, text) {
+    await message.author.send(text);
+    await message.react('👍');
+    const canDelete = await this.hasPerm(message, 'MANAGE_MESSAGES');
+    if (canDelete) {
+      await message.delete();
+    }
+  }
+
+  hasPerm(message, perm_flag) {
+    return message.guild.me.hasPermission(perm_flag);
   }
 
   parseCommand(message, cmd) {
@@ -78,15 +94,16 @@ class PsyBot {
     // Must start with the prefix
     // Must be only the prefix if args on
     // Must not be only the prefix with args off
-    if (msg.indexOf(cmd.prefix) !== 0 ||
-      cmd.args === true && msg === cmd.prefix ||
-      cmd.args === false && msg !== cmd.prefix) {
+    const hasPrefix = (msg.indexOf(cmd.prefix) === 0);
+    const hasArgsAndNoExtraText = (cmd.args) && (msg === cmd.prefix);
+    const noArgsAndNotExactMatch = (!cmd.args) && (msg !== cmd.prefix);
+    if (cmd.prefix && (!hasPrefix || hasArgsAndNoExtraText || noArgsAndNotExactMatch)) {
       return;
-    }
+    } 
 
     // Check permission
     if(cmd.requiredPermissions) {
-      if (!message.member.hasPermissions(cmd.requiredPermissions)) {
+      if (!message.member.hasPermission(cmd.requiredPermissions)) {
         return this.reply(message, `You don't have the '${cmd.requiredPermissions.toString()}' permissions`);
       }
     }
@@ -97,6 +114,8 @@ class PsyBot {
       }
     }
     message.channel.startTyping();
+
+    cmd.prefix = cmd.prefix || '';
 
     var restOfMessage = null;
     if (cmd.args) {
@@ -123,12 +142,18 @@ class PsyBot {
   }
 
   addCommand(self, cmd) {
-    if (cmd.prefix === undefined || cmd.callback === undefined) {
+    if (cmd.callback === undefined) {
       debug('Invalid Command, the following does not have a command and callback defined', cmd);
       return;
     }
 
+    if (!cmd.enabled) {
+      debug('Command disabled, skipping', cmd.prefix);
+      return;
+    }
+
     self.commands.push(cmd);
+    debug('Command added', cmd.prefix);
   }
 
   createClient(options) {
@@ -140,7 +165,7 @@ class PsyBot {
     this.client.login(token).then(() => {
       debug('Successfully logged in');
 
-      this.client.user.setGame('on x Servers');
+      this.client.user.setActivity(`on ${this.client.guilds.size} Servers`);
       this.client.user.setUsername('HeiHei')
       .then(user => debug(`Updated username: ${user.username}`))
       .catch(debug);
