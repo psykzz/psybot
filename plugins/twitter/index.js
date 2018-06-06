@@ -28,10 +28,12 @@ module.exports = {
     requiredPermissions: ['MANAGE_ROLES_OR_PERMISSIONS'],
     requiredRole: 'twitter',
     callback: (bot, message, update) => {
-        twitter.post('statuses/update', {status: update},  function(error, tweet) {
-            debug(error, tweet);
+        const author = message.author.name;
+        const content = message.cleanContent.msg.substr('!tweet'.length)
+        twitter.post('statuses/update', {status: `${author}: ${content}`},  function(error, tweet) {
             if(error) {
-                return;
+                debug("error sending tweet", error);
+                return bot.reply(message, 'Error sending tweet');
             }
             bot.reply(message, 'Tweet sent');
         });
