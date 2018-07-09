@@ -35,7 +35,10 @@ class PsyBot {
         }
       });
     }
-
+    
+    // Generic error handler
+    this.client.on('error', error => debug(`An error occurred: ${error}`, {error}));
+    
     this.client.on('message', (message) => {
       if (message.author.bot) {
         return;
