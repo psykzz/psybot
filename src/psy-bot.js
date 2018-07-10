@@ -57,12 +57,12 @@ class PsyBot {
     // Update server playing list
     this.client.on("guildCreate", guild => {
       console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
-      this.client.user.setGame(`on ${client.guilds.size} Servers`);
+      this.client.user.setActivity(`on ${this.client.guilds.size} Servers`);
     });
 
     this.client.on("guildDelete", guild => {
       console.log(`Remove from: ${guild.name} (id: ${guild.id})`);
-      this.client.user.setGame(`on ${this.client.guilds.size} Servers`);
+      this.client.user.setActivity(`on ${this.client.guilds.size} Servers`);
     });
   }
 
@@ -116,7 +116,6 @@ class PsyBot {
         return this.reply(message, `You don't have the '${cmd.requiredRole}' role.`);
       }
     }
-    message.channel.startTyping();
 
     cmd.prefix = cmd.prefix || '';
 
@@ -134,6 +133,7 @@ class PsyBot {
       }
     }
 
+    message.channel.startTyping();
     var response = cmd.callback(this, message, restOfMessage);
     message.channel.stopTyping();
     return response;

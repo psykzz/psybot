@@ -16,5 +16,6 @@ bot.addCommands([
   require('./plugins/roasts').others,
   require('./plugins/everyone-ree'),
   require('./plugins/twitter'),
+  require('./plugins/server-query'),
   // require('./plugins/group-helper').help,
 ]);
