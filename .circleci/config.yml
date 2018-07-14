@@ -35,8 +35,8 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-              docker tag app psykzz/psybot:latest
-              docker tag app psykzz/psybot:${CIRCLE_SHA1}
-              docker push psykzz/psybot:latest
-              docker push psykzz/psybot:${CIRCLE_SHA1}
+              docker tag app ${IMAGE_NAME}:latest
+              docker tag app ${IMAGE_NAME}:${CIRCLE_SHA1}
+              docker push ${IMAGE_NAME}:latest
+              docker push ${IMAGE_NAME}:${CIRCLE_SHA1}
             fi
