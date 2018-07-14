@@ -16,6 +16,7 @@
     "dotenv": "^4.0.0",
     "nodemon": "^1.14.12",
     "node-opus": "^0.2.7",
+    "sourcequery": "^0.0.2",
     "slug": "^0.9.1",
     "twitter": "^1.7.0"
   }
