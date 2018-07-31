@@ -19,3 +19,10 @@ bot.addCommands([
   require('./plugins/server-query'),
   // require('./plugins/group-helper').help,
 ]);
+
+
+bot.addEventHandlers({
+  'presenceUpdate': [
+    require('./plugins/game-tracking'),
+  ]
+})

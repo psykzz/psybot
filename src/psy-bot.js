@@ -141,10 +141,10 @@ class PsyBot {
 
   addCommands(commands) {
     var self = this;
-    commands.forEach(cmd => self.addCommand(self, cmd));
+    commands.forEach(cmd => self.addCommand(cmd));
   }
 
-  addCommand(self, cmd) {
+  addCommand(cmd) {
     if (cmd.callback === undefined) {
       debug('Invalid Command, the following does not have a command and callback defined', cmd);
       return;
@@ -155,8 +155,22 @@ class PsyBot {
       return;
     }
 
-    self.commands.push(cmd);
+    this.commands.push(cmd);
     debug('Command added', cmd.prefix);
+  }
+
+  addEventHandlers(config) {
+    Object.keys(config).forEach(event => {
+      config[event].forEach(handler => {
+        this.client.on(event, (oldPresence, newPresence) => {
+          try {
+            handler.callback(this, oldPresence, newPresence)
+          } catch (e) {
+            debug(`Failed to handle event: ${event}\nException: ${e}`);
+          }
+        });
+      })
+    })
   }
 
   createClient(options) {
