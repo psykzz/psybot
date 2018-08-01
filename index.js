@@ -30,5 +30,11 @@ bot.addEventHandlers({
   ]
 });
 
+// Web stuff
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.get('*', (req, res) => res.sendFile('psybot-data.json', { root: path.join(__dirname, 'data') }));
 app.listen(3000, () => debug('Listening on 3000'))
