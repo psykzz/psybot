@@ -1,0 +1,72 @@
+<html>
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+    <div id="chart" style="height: 150px;"></div>
+    <script type="text/javascript">
+    google.charts.load("current", {packages:["timeline"]});
+    google.charts.setOnLoadCallback(() => {
+
+        fetch("http://direct.psykzz.com:3000/data.json", { mode: "no-cors" })
+        .then(response => {
+            console.log(response)
+            return response.json();
+        })
+        .then(data => drawChart(data));
+
+    });
+
+    function drawChart(data) {
+        var container = document.getElementById('chart');
+        var chart = new google.visualization.Timeline(container);
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn({ type: 'string', id: 'Day' });
+        dataTable.addColumn({ type: 'string', id: 'Game' });
+        dataTable.addColumn({ type: 'date', id: 'Start' });
+        dataTable.addColumn({ type: 'date', id: 'End' });
+
+        /*
+        data = {
+            game: [
+                {start: date, stop: date}
+            ]
+        }
+        */
+
+        var data = {}
+
+        Object.keys(data).forEach(key => {
+            const [user, _, game, action] = key.split('.');
+            const user = 'PsyKzz';
+            if (user !== 'PsyKzz') {
+                return;
+            }
+
+            if (!(game in data)) {
+                data[game] = [];
+            }
+
+            const item = [new Date(date), action]
+             data[key].forEach(date => {
+                data[game].push(item);
+            })
+        });
+
+        dataTable.addRows([
+        //   [ 'Day of Week',  'Game Name', StartDate,  EndDate ],
+        [ 'Petunia Room',   'Google Charts',       new Date(0,0,0,12,30,0), new Date(0,0,0,14,0,0) ],
+        
+        ]);
+
+        var options = {
+        timeline: { colorByRowLabel: true },
+        backgroundColor: '#ffd'
+        };
+
+        chart.draw(dataTable, options);
+    }
+    </script>
+
+</body>
+</html>
