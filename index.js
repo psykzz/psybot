@@ -3,6 +3,8 @@ require('dotenv').config();
 require('debug').enable('PsyBot');
 var debug = require('debug')('PsyBot');
 
+const path = require('path')
+const app = require('express')()
 var PsyBot = require('./src/psy-bot');
 
 var token = process.env.DISCORD_TOKEN;
@@ -25,4 +27,7 @@ bot.addEventHandlers({
   'presenceUpdate': [
     require('./plugins/game-tracking'),
   ]
-})
+});
+
+app.get('/data.json', (req, res) => res.sendFile('psybot-data.json', { root: path.join(__dirname, 'data') }));
+app.listen(3000, () => debug('Listening on 3000'))
