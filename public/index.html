@@ -3,19 +3,25 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
-    <div id="chart" style="height: 150px;"></div>
+    <div id="chart" style="height: 300px;"></div>
     <script type="text/javascript">
+    const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     google.charts.load("current", {packages:["timeline"]});
     google.charts.setOnLoadCallback(() => {
 
-        fetch("http://direct.psykzz.com:3000/data.json", { mode: "no-cors" })
-        .then(response => {
-            console.log(response)
-            return response.json();
-        })
+        fetch("http://direct.psykzz.com:3000/data.json")
+        .then(response => response.json())
         .then(data => drawChart(data));
 
     });
+
+    function normailzeDate(oldDate) {
+        oldDate.setDate((new Date()).getDay())
+        oldDate.setMonth((new Date()).getMonth())
+        oldDate.setYear((new Date()).getUTCFullYear())
+        return oldDate;
+    }
 
     function drawChart(data) {
         var container = document.getElementById('chart');
@@ -34,34 +40,50 @@
         }
         */
 
-        var data = {}
+        var sessions = {}
+        let _data = data;
+        console.log(data);
 
         Object.keys(data).forEach(key => {
             const [user, _, game, action] = key.split('.');
-            const user = 'PsyKzz';
-            if (user !== 'PsyKzz') {
+            if (action !== 'start') {
                 return;
             }
-
+            if (user !== 'PsyKzz') {
+            // if (user !== 'Lydia-K') {
+                return;
+            }
             if (!(game in data)) {
-                data[game] = [];
+                sessions[game] = [];
             }
 
-            const item = [new Date(date), action]
-             data[key].forEach(date => {
-                data[game].push(item);
-            })
+            for (let index = 0; index < data[key].length; index++) {
+                const startDate = new Date(_data[key].shift());
+                const endDate = new Date(_data[key].shift());
+                sessions[game].push([startDate.getDay(), startDate, endDate]);
+            }
+            
         });
+        console.log(sessions);
 
-        dataTable.addRows([
+        table_date = []
+        for(var game in sessions) {
+            sessions[game].forEach(([dayOfWeek, start, end]) => {
+                const day = DAYS[dayOfWeek];
+                start = normailzeDate(start)
+                end = normailzeDate(end)
+                if (start > end) {
+                    return;
+                }
+                table_date.push([day, game, start, end])
+            })
+        }
+        dataTable.addRows(table_date);
         //   [ 'Day of Week',  'Game Name', StartDate,  EndDate ],
-        [ 'Petunia Room',   'Google Charts',       new Date(0,0,0,12,30,0), new Date(0,0,0,14,0,0) ],
         
-        ]);
 
         var options = {
         timeline: { colorByRowLabel: true },
-        backgroundColor: '#ffd'
         };
 
         chart.draw(dataTable, options);
