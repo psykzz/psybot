@@ -133,9 +133,17 @@ class PsyBot {
       }
     }
 
-    message.channel.startTyping();
-    var response = cmd.callback(this, message, restOfMessage);
-    message.channel.stopTyping();
+    var response;
+    try {
+      message.channel.startTyping();
+      response = cmd.callback(this, message, restOfMessage);
+    } catch (e) {
+      debug('Error running callback', e)
+      return;
+    } finally {
+      message.channel.stopTyping(true);
+    }
+    
     return response;
   }
 
