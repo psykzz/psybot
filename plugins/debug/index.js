@@ -6,6 +6,7 @@ const PAD_SIZE = 25;
 module.exports = {
     enabled: true,
     prefix: '!debug servers',
+    requiredUsers: 'PsyKzz#4695',
     callback: (bot, message) => {
         let reply = '```';
 
