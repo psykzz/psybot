@@ -135,7 +135,7 @@ class PsyBot {
 
     var response;
     try {
-      message.channel.startTyping();
+      // message.channel.startTyping();
       response = cmd.callback(this, message, restOfMessage);
     } catch (e) {
       debug('Error running callback', e)
