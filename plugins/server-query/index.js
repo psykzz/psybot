@@ -3,7 +3,7 @@ const debug = require('debug')('PsyBot');
 const SourceQuery = require('sourcequery');
 const async = require('async');
 
-const sq = new SourceQuery(5000); // 1000ms timeout
+const sq = new SourceQuery(5000); // 5000ms timeout
 
 module.exports = {
     enabled: true,

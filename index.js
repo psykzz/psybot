@@ -20,6 +20,7 @@ bot.addCommands([
   require('./plugins/everyone-ree'),
   require('./plugins/twitter'),
   require('./plugins/server-query'),
+  require('./plugins/server-query-watch'),
   // require('./plugins/group-helper').help,
 ]);
 
@@ -36,5 +37,6 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+app.get('/index.html', (req, res) => res.sendFile('index.html', { root: path.join(__dirname, 'public') }));
 app.get('*', (req, res) => res.sendFile('psybot-data.json', { root: path.join(__dirname, 'data') }));
 app.listen(3000, () => debug('Listening on 3000'))
