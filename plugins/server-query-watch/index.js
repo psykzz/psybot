@@ -23,29 +23,33 @@ module.exports = {
         [ip, port] = host.split(':', 2);
 
         // Placeholder message
-        messageId = bot.reply(message,  'Working...', -1);
+        bot.reply(message,  'Working...', -1)
+        .then(msg => {
+            messageId = msg;
+            watchId = setInterval(() => {
+                sq.open(ip, port);
+                async.parallel([
+                    (cb) => sq.getInfo(cb),
+                    (cb) => sq.getPlayers(cb),
+                    (cb) => sq.getRules(cb)
+                ], (err, results) => {
+                    sq.close(() => {});
+                    if (err) {
+                        return;
+                    }
+                    let reply = "```";
+                    reply += `\nName: ${results[0].name}\n`
+                    reply += `Map: ${results[0].map}\n`
+                    reply += `Players: ${results[0].players}/${results[0].maxplayers}\n`
+                    results[1].forEach(player => {
+                        reply += `\t${player.name} - ${Math.round(player.online / 60 / 60)} hour(s)\n`;
+                    });
+                    reply += "```"
+                    messageId.edit(reply);
+                })
+            }, WATCH_INTERVAL);
+        });
 
-        watchId = setInterval(() => {
-            sq.open(ip, port);
-            async.parallel([
-                (cb) => sq.getInfo(cb),
-                (cb) => sq.getPlayers(cb),
-                (cb) => sq.getRules(cb)
-            ], (err, results) => {
-                sq.close(() => {});
-                if (err) {
-                    return;
-                }
-                let reply = "```";
-                reply += `\nName: ${results[0].name}\n`
-                reply += `Map: ${results[0].map}\n`
-                reply += `Players: ${results[0].players}/${results[0].maxplayers}\n`
-                results[1].forEach(player => {
-                    reply += `\t${player.name} - ${Math.round(player.online / 60 / 60)} hour(s)\n`;
-                });
-                reply += "```"
-                messageId.edit(reply);
-            })
-        }, WATCH_INTERVAL);
+        
     }
 }
