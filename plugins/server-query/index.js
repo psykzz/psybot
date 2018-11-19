@@ -21,8 +21,10 @@ module.exports = {
             (cb) => sq.getPlayers(cb),
             (cb) => sq.getRules(cb)
         ], (err, results) => {
-            debug(err, results)
-            sq.close(() => {})
+            sq.close(() => {});
+            if (err) {
+                return bot.reply(message, `Request failed: ${err}`, -1);
+            }
             let reply = "```";
             reply += `\nName: ${results[0].name}\n`
             reply += `Map: ${results[0].map}\n`
