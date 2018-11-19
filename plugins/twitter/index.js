@@ -25,6 +25,7 @@ module.exports = {
     enabled: ENABLED,
     prefix: '!tweet',
     args: true,
+    requiredUsers: 'PsyKzz#4695',
     requiredPermissions: ['MANAGE_ROLES_OR_PERMISSIONS'],
     requiredRole: 'twitter',
     callback: (bot, message, update) => {

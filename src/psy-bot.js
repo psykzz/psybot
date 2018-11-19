@@ -105,6 +105,12 @@ class PsyBot {
     } 
 
     // Check permission
+    if(cmd.requiredUsers) {
+      if (message.member.user.tag !== cmd.requiredUsers || cmd.requiredUsers.indexOf(message.member.user.tag) === -1) {
+        return this.reply(message, `You don't have the required permissions`);
+      }
+    }
+    
     if(cmd.requiredPermissions) {
       if (!message.member.hasPermission(cmd.requiredPermissions)) {
         return this.reply(message, `You don't have the '${cmd.requiredPermissions.toString()}' permissions`);
@@ -133,9 +139,17 @@ class PsyBot {
       }
     }
 
-    message.channel.startTyping();
-    var response = cmd.callback(this, message, restOfMessage);
-    message.channel.stopTyping();
+    var response;
+    try {
+      // message.channel.startTyping();
+      response = cmd.callback(this, message, restOfMessage);
+    } catch (e) {
+      debug('Error running callback', e)
+      return;
+    } finally {
+      message.channel.stopTyping(true);
+    }
+    
     return response;
   }
 

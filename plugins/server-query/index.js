@@ -1,10 +1,9 @@
 'use strict';
-var debug = require('debug')('PsyBot');
+const debug = require('debug')('PsyBot');
 const SourceQuery = require('sourcequery');
-
 const async = require('async');
 
-var sq = new SourceQuery(5000); // 1000ms timeout
+const sq = new SourceQuery(5000); // 1000ms timeout
 
 module.exports = {
     enabled: true,
@@ -21,8 +20,10 @@ module.exports = {
             (cb) => sq.getPlayers(cb),
             (cb) => sq.getRules(cb)
         ], (err, results) => {
-            debug(err, results)
-            sq.close(() => {})
+            sq.close(() => {});
+            if (err) {
+                return bot.reply(message, `Request failed: ${err}`, -1);
+            }
             let reply = "```";
             reply += `\nName: ${results[0].name}\n`
             reply += `Map: ${results[0].map}\n`
