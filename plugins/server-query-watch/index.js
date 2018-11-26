@@ -21,6 +21,7 @@ function WatchServerInfo(ip, port, msg, counter) {
         sq.getPlayers, 
         sq.getRules
     ], (err, results) => {
+        debug('processing');
         // Close connection
         sq.close(() => {
             debug('closed');
