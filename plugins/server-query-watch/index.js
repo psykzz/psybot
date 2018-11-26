@@ -23,8 +23,8 @@ function GetInfo(ip, port, msg, counter) {
         sq.close(() => {
             if (err) {
                 return setTimeout(() => GetInfo(ip, port, msg, counter), WATCH_INTERVAL);
-                
             }
+            
             let reply = "```";
             reply += `\nName: ${results[0].name}\n`;
             reply += `Map: ${results[0].map}\n`;
@@ -33,7 +33,9 @@ function GetInfo(ip, port, msg, counter) {
                 reply += `\t${player.name} - ${Math.round(player.online / 60 / 60)} hour(s)\n`;
             });
             reply += "```";
+            
             msg.edit(reply);
+            
             setTimeout(() => GetInfo(ip, port, msg, counter), WATCH_INTERVAL);
         });
     });
