@@ -11,8 +11,10 @@ let messageId;
 
 function WatchServerInfo(ip, port, msg, counter) {
     if (!progressCounter !== counter) {
+        debug('bad counter stopping');
         return;
     }
+    debug('open SQ message')
     sq.open(ip, port);
     async.parallel([
         sq.getInfo, 
@@ -21,7 +23,9 @@ function WatchServerInfo(ip, port, msg, counter) {
     ], (err, results) => {
         // Close connection
         sq.close(() => {
+            debug('closed');
             if (err) {
+                debug('error');
                 return setTimeout(() => WatchServerInfo(ip, port, msg, counter), WATCH_INTERVAL);
             }
             
@@ -33,9 +37,9 @@ function WatchServerInfo(ip, port, msg, counter) {
                 reply += `\t${player.name} - ${Math.round(player.online / 60 / 60)} hour(s)\n`;
             });
             reply += "```";
-            
+            debug('updating message')
             msg.edit(reply);
-            
+            debug('requeue message')
             setTimeout(() => WatchServerInfo(ip, port, msg, counter), WATCH_INTERVAL);
         });
     });
