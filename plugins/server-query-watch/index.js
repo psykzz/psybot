@@ -22,18 +22,19 @@ function GetInfo(ip, port, msg, counter) {
         // Close connection
         sq.close(() => {
             if (err) {
-                setTimeout(() => GetInfo(ip, port, msg, counter), WATCH_INTERVAL)
+                return setTimeout(() => GetInfo(ip, port, msg, counter), WATCH_INTERVAL);
+                
             }
             let reply = "```";
-            reply += `\nName: ${results[0].name}\n`
-            reply += `Map: ${results[0].map}\n`
-            reply += `Players: ${results[0].players}/${results[0].maxplayers}\n`
+            reply += `\nName: ${results[0].name}\n`;
+            reply += `Map: ${results[0].map}\n`;
+            reply += `Players: ${results[0].players}/${results[0].maxplayers}\n`;
             results[1].forEach(player => {
                 reply += `\t${player.name} - ${Math.round(player.online / 60 / 60)} hour(s)\n`;
             });
-            reply += "```"
+            reply += "```";
             msg.edit(reply);
-            setTimeout(() => GetInfo(ip, port, msg, counter), WATCH_INTERVAL)
+            setTimeout(() => GetInfo(ip, port, msg, counter), WATCH_INTERVAL);
         });
     });
 }
