@@ -38,13 +38,14 @@ function WatchServerInfo(ip, port, msg, counter) {
         debug('updating message')
         msg.edit(reply);
         debug('requeue message')
+         // Close connection
+        sq.close(() => {
+            debug('closed');
+            setTimeout(() => WatchServerInfo(ip, port, msg, counter), WATCH_INTERVAL)
+        });
     });
     
-    // Close connection
-    sq.close(() => {
-        debug('closed');
-        setTimeout(() => WatchServerInfo(ip, port, msg, counter), WATCH_INTERVAL)
-    });
+   
 }
 
 module.exports = {
