@@ -17,9 +17,9 @@ function WatchServerInfo(ip, port, msg, counter) {
     debug('open SQ message')
     sq.open(ip, port);
     async.parallel([
-        sq.getInfo, 
-        sq.getPlayers, 
-        sq.getRules
+        (cb) => sq.getInfo(cb), 
+        (cb) => sq.getPlayers(cb), 
+        (cb) => sq.getRules(cb)
     ], (err, results) => {
         debug('processing');
         // Close connection
