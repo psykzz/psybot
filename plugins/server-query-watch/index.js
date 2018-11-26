@@ -10,7 +10,7 @@ let progressCounter = 0;
 let messageId;
 
 function WatchServerInfo(ip, port, msg, counter) {
-    if (!progressCounter !== counter) {
+    if (progressCounter !== counter) {
         debug('bad counter stopping');
         return;
     }
