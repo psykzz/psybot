@@ -9,7 +9,7 @@ const WATCH_INTERVAL = 3000;
 let progressCounter = 0;
 let messageId;
 
-function GetInfo(ip, port, msg, counter) {
+function WatchServerInfo(ip, port, msg, counter) {
     if (!progressCounter !== counter) {
         return;
     }
@@ -22,7 +22,7 @@ function GetInfo(ip, port, msg, counter) {
         // Close connection
         sq.close(() => {
             if (err) {
-                return setTimeout(() => GetInfo(ip, port, msg, counter), WATCH_INTERVAL);
+                return setTimeout(() => WatchServerInfo(ip, port, msg, counter), WATCH_INTERVAL);
             }
             
             let reply = "```";
@@ -36,7 +36,7 @@ function GetInfo(ip, port, msg, counter) {
             
             msg.edit(reply);
             
-            setTimeout(() => GetInfo(ip, port, msg, counter), WATCH_INTERVAL);
+            setTimeout(() => WatchServerInfo(ip, port, msg, counter), WATCH_INTERVAL);
         });
     });
 }
