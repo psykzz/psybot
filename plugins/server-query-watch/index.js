@@ -22,31 +22,30 @@ function WatchServerInfo(ip, port, msg, counter) {
         (cb) => sq.getRules(cb)
     ], (err, results) => {
         debug('processing');
-        // Close connection
-        sq.close(() => {
-            debug('closed');
-            if (err) {
-                debug('error');
-                return setTimeout(() => WatchServerInfo(ip, port, msg, counter), WATCH_INTERVAL);
-            }
-            
-            let reply = "```";
-            reply += `\nName: ${results[0].name}\n`;
-            reply += `Map: ${results[0].map}\n`;
-            reply += `Players: ${results[0].players}/${results[0].maxplayers}\n`;
-            results[1].forEach(player => {
-                reply += `\t${player.name} - ${Math.round(player.online / 60 / 60)} hour(s)\n`;
-            });
-            reply += "```";
-            debug('updating message')
-            msg.edit(reply);
-            debug('requeue message')
-            setTimeout(() => WatchServerInfo(ip, port, msg, counter), WATCH_INTERVAL);
+        if (err) {
+            debug('error');
+            return
+        }
+
+        let reply = "```";
+        reply += `\nName: ${results[0].name}\n`;
+        reply += `Map: ${results[0].map}\n`;
+        reply += `Players: ${results[0].players}/${results[0].maxplayers}\n`;
+        results[1].forEach(player => {
+            reply += `\t${player.name} - ${Math.round(player.online / 60 / 60)} hour(s)\n`;
         });
+        reply += "```";
+        debug('updating message')
+        msg.edit(reply);
+        debug('requeue message')
+    });
+    
+    // Close connection
+    sq.close(() => {
+        debug('closed');
+        setTimeout(() => WatchServerInfo(ip, port, msg, counter), WATCH_INTERVAL)
     });
 }
-
-
 
 module.exports = {
     enabled: true,
