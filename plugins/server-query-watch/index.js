@@ -15,9 +15,9 @@ function GetInfo(ip, port, msg, counter) {
     }
     sq.open(ip, port);
     async.parallel([
-        (cb) => sq.getInfo(cb),
-        (cb) => sq.getPlayers(cb),
-        (cb) => sq.getRules(cb)
+        sq.getInfo, 
+        sq.getPlayers, 
+        sq.getRules
     ], (err, results) => {
         // Close connection
         sq.close(() => {
