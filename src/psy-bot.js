@@ -88,7 +88,7 @@ class PsyBot {
   }
 
   hasPerm(message, perm_flag) {
-    return message.guild.me.hasPermission(perm_flag);
+    return message.guild && message.guild.me.hasPermission(perm_flag);
   }
 
   parseCommand(message, cmd) {
@@ -106,9 +106,13 @@ class PsyBot {
 
     // Check permission
     if(cmd.requiredUsers) {
-      if (message.member.user.tag !== cmd.requiredUsers || cmd.requiredUsers.indexOf(message.member.user.tag) === -1) {
+      if (message.author.tag !== cmd.requiredUsers || cmd.requiredUsers.indexOf(message.author.tag) === -1) {
         return this.reply(message, `You don't have the required permissions`);
       }
+    }
+    
+    if ((cmd.requirePermissions || cmd.requiredRole) && !message.member) {
+      return this.reply(message, `You can't run this command in a private message`);
     }
     
     if(cmd.requiredPermissions) {
