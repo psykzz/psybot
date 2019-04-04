@@ -1,0 +1,40 @@
+'use strict';
+var debug = require('debug')('PsyBot');
+
+const SOUNDS = {
+    'lettuce': './media/random/15footfungus.ogg',
+    'shutdown': './media/random/winxpshutdown.ogg',
+    'ree': './media/Jerry/ree.ogg',
+    'waaah': './media/random/coffee/Waaaaaah.ogg',
+    'wow': './media/random/coffee/Wow.ogg',
+    'nazijoke': './media/random/nazi-knockknock.ogg',
+    'omae': './media/random/omae.ogg',
+    'nani': './media/random/nani.ogg',
+    'imfine': './media/random/im-fine.ogg',
+    'faces': './media/random/familiar-faces.ogg',
+}
+
+
+function playsound(bot, message, args) {
+    if (!msg.member.voiceChannel) return
+    const soundPath = SOUNDS[args];
+    if (!soundPath || !fs.existsSync(SOUNDS[args])) return;
+
+    if (!msg.member.voiceChannel.joinable) return msg.reply(`I don't have access to that channel.`);
+    if (!msg.member.voiceChannel.speakable) return msg.reply(`I can't speak in that channel.`);
+
+    let connection = await msg.member.voiceChannel.join();
+    let dispatcher = connection.playFile(soundPath);
+
+    dispatcher.on('speaking', (speaking) => {
+        if(!speaking) connection.disconnect();
+        msg.delete();
+    });
+}
+
+module.exports = {
+    enabled: true,
+    prefix: '!play',
+    args: true,
+    callback: roast
+}
