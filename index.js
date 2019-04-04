@@ -21,6 +21,7 @@ bot.addCommands([
   require('./plugins/twitter'),
   require('./plugins/server-query'),
   require('./plugins/server-query-watch'),
+  require('./plugins/sounds'),
   // require('./plugins/group-helper').help,
 ]);
 
