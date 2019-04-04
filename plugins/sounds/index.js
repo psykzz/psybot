@@ -15,7 +15,7 @@ const SOUNDS = {
 }
 
 
-async function playSound(bot, message, args) {
+async function playSound(bot, msg, args) {
     if (!msg.member.voiceChannel) return
     const soundPath = SOUNDS[args];
     if (!soundPath || !fs.existsSync(SOUNDS[args])) return;
