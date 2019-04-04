@@ -1,4 +1,5 @@
 'use strict';
+var fs = require('fs');
 var debug = require('debug')('PsyBot');
 
 const SOUNDS = {
