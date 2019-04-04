@@ -15,7 +15,7 @@ const SOUNDS = {
 }
 
 
-function playsound(bot, message, args) {
+async function playSound(bot, message, args) {
     if (!msg.member.voiceChannel) return
     const soundPath = SOUNDS[args];
     if (!soundPath || !fs.existsSync(SOUNDS[args])) return;
@@ -36,5 +36,5 @@ module.exports = {
     enabled: true,
     prefix: '!play',
     args: true,
-    callback: roast
+    callback: playSound
 }
