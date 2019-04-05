@@ -25,8 +25,8 @@ async function playSound(bot, msg, args) {
     if (!msg.member.voiceChannel.joinable) return msg.reply(`I don't have access to that channel.`);
     if (!msg.member.voiceChannel.speakable) return msg.reply(`I can't speak in that channel.`);
 
-    let connection = await msg.member.voiceChannel.join();
-    let dispatcher = connection.playFile(soundPath);
+    let connection = await msg.member.voice.channel.join();
+    let dispatcher = connection.play(soundPath);
 
     dispatcher.on('end', (reason) => {
         debug("end", reason);
