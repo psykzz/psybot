@@ -1,5 +1,6 @@
 'use strict';
 var fs = require('fs');
+var path = require('path');
 var debug = require('debug')('PsyBot');
 
 const SOUNDS = {
@@ -19,7 +20,7 @@ const SOUNDS = {
 async function playSound(bot, msg, args) {
     if (!msg.member.voiceChannel) return
     const soundPath = SOUNDS[args.trim()];
-    if (!soundPath || !fs.existsSync(soundPath)) return msg.reply(`That sound doesn't exist. ${args.trim()} -> ${soundPath}`);
+    if (!soundPath || !fs.existsSync(path.resolve(__dirname, soundPath))) return msg.reply(`That sound doesn't exist. ${args.trim()} -> ${soundPath}`);
 
     if (!msg.member.voiceChannel.joinable) return msg.reply(`I don't have access to that channel.`);
     if (!msg.member.voiceChannel.speakable) return msg.reply(`I can't speak in that channel.`);
