@@ -29,15 +29,15 @@ async function playSound(bot, msg, args) {
     let dispatcher = connection.playFile(soundPath);
 
     dispatcher.on('end', (reason) => {
-        debug(reason);
+        debug("end", reason);
         connection.disconnect();
         msg.delete();
     });
     dispatcher.on('debug', (reason) => {
-        debug(reason);
+        debug("debug", reason);
     });
     dispatcher.on('error', (reason) => {
-        debug(reason);
+        debug("error", reason);
     });
 }
 
