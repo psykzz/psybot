@@ -3,6 +3,7 @@ var fs = require('fs');
 var path = require('path');
 var debug = require('debug')('PsyBot');
 
+
 const SOUNDS = {
     'lettuce': './media/random/15footfungus.ogg',
     'shutdown': './media/random/winxpshutdown.ogg',
@@ -18,24 +19,22 @@ const SOUNDS = {
 
 
 async function playSound(bot, msg, args) {
-    if (!msg.member.voiceChannel) return
-    const soundPath = SOUNDS[args.trim()];
-    if (!soundPath || !fs.existsSync(path.resolve(__dirname, soundPath))) return msg.reply(`That sound doesn't exist. ${args.trim()} -> ${soundPath}`);
+    if (!msg.member.voice.channel) return
+    const soundPath = path.resolve(__dirname, SOUNDS[args.trim()]);
+    if (!soundPath || !fs.existsSync(soundPath)) return msg.reply(`That sound doesn't exist. ${args.trim()} -> ${soundPath}`);
 
-    if (!msg.member.voiceChannel.joinable) return msg.reply(`I don't have access to that channel.`);
-    if (!msg.member.voiceChannel.speakable) return msg.reply(`I can't speak in that channel.`);
+    if (!msg.member.voice.channel.joinable) return msg.reply(`I don't have access to that channel.`);
+    if (!msg.member.voice.channel.speakable) return msg.reply(`I can't speak in that channel.`);
 
     let connection = await msg.member.voice.channel.join();
-    let dispatcher = connection.play(soundPath, {
-        volume: 1,
-        passes: 5
-    });
-
-    dispatcher.on('finish', (reason) => {
-        connection.disconnect();
+    let dispatcher = await connection.play(soundPath);
+    
+    dispatcher.on('finish', (e) => {
         msg.delete();
+        connection.disconnect();
     });
 }
+
 
 module.exports = {
     enabled: true,
