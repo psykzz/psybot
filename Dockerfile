@@ -2,7 +2,7 @@ FROM node:lts-alpine
 WORKDIR /src
 
 RUN apk upgrade -U \
- && apk add ca-certificates ffmpeg git libva-intel-driver \
+ && apk add ca-certificates python ffmpeg git libva-intel-driver \
  && rm -rf /var/cache/*
 
 RUN mkdir -p ./data
