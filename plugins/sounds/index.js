@@ -26,18 +26,14 @@ async function playSound(bot, msg, args) {
     if (!msg.member.voiceChannel.speakable) return msg.reply(`I can't speak in that channel.`);
 
     let connection = await msg.member.voice.channel.join();
-    let dispatcher = connection.play(soundPath);
+    let dispatcher = connection.play(soundPath, {
+        volume: 1,
+        passes: 5
+    });
 
-    dispatcher.on('end', (reason) => {
-        debug("end", reason);
+    dispatcher.on('finish', (reason) => {
         connection.disconnect();
         msg.delete();
-    });
-    dispatcher.on('debug', (reason) => {
-        debug("debug", reason);
-    });
-    dispatcher.on('error', (reason) => {
-        debug("error", reason);
     });
 }
 
