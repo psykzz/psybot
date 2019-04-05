@@ -28,8 +28,8 @@ async function playSound(bot, msg, args) {
     let connection = await msg.member.voiceChannel.join();
     let dispatcher = connection.playFile(soundPath);
 
-    dispatcher.on('speaking', (speaking) => {
-        if(!speaking) connection.disconnect();
+    dispatcher.on('end', (speaking) => {
+        connection.disconnect();
         msg.delete();
     });
 }
