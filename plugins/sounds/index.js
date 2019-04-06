@@ -15,6 +15,7 @@ const SOUNDS = {
     'nani': './media/random/nani.ogg',
     'imfine': './media/random/im-fine.ogg',
     'faces': './media/random/familiar-faces.ogg',
+    'hitormiss': './media/random/hit-or-miss.ogg',
 }
 
 
