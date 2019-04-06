@@ -16,6 +16,7 @@ const SOUNDS = {
     'imfine': './media/random/im-fine.ogg',
     'faces': './media/random/familiar-faces.ogg',
     'hitormiss': './media/random/hit-or-miss.ogg',
+    'itsthatsplash': './media/random/what-you-got-on.ogg',
 }
 
 
