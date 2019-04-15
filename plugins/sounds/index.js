@@ -25,8 +25,10 @@ const SOUNDS = {
 
 async function playSound(bot, msg, args) {
     if (!msg.member.voice.channel) return
+    if (!SOUNDS[args.trim()]) return msg.reply(`That sound doesn't exist. ${args.trim()}`);
+    
     const soundPath = path.resolve(__dirname, SOUNDS[args.trim()]);
-    if (!soundPath || !fs.existsSync(soundPath)) return msg.reply(`That sound doesn't exist. ${args.trim()} -> ${soundPath}`);
+    if (!soundPath || !fs.existsSync(soundPath)) return msg.reply(`That sound file can't be found. ${args.trim()} -> ${soundPath}`);
 
     if (!msg.member.voice.channel.joinable) return msg.reply(`I don't have access to that channel.`);
     if (!msg.member.voice.channel.speakable) return msg.reply(`I can't speak in that channel.`);
