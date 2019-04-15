@@ -17,6 +17,9 @@ const SOUNDS = {
     'faces': './media/random/familiar-faces.ogg',
     'hitormiss': './media/random/hit-or-miss.ogg',
     'itsthatsplash': './media/random/what-you-got-on.ogg',
+    'donuts': './media/random/eat-some-donuts.ogg',
+    'diet': './media/random/you-on-diet.ogg',
+    'sadsadsad': './media/random/im-sad-sad-sad.ogg',
 }
 
 
