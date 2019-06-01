@@ -20,6 +20,7 @@ const SOUNDS = {
     'donuts': './media/random/eat-some-donuts.ogg',
     'diet': './media/random/you-on-diet.ogg',
     'sadsadsad': './media/random/im-sad-sad-sad.ogg',
+    'pee': './media/random/pee.ogg',
 }
 
 
