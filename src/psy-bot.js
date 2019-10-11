@@ -35,10 +35,10 @@ class PsyBot {
         }
       });
     }
-    
+
     // Generic error handler
     this.client.on('error', error => debug(`An error occurred: ${error}`, {error}));
-    
+
     this.client.on('message', (message) => {
       if (message.author.bot) {
         return;
@@ -53,7 +53,7 @@ class PsyBot {
       });
 
     });
-    
+
     // Update server playing list
     this.client.on("guildCreate", guild => {
       console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
@@ -102,7 +102,7 @@ class PsyBot {
     const noArgsAndNotExactMatch = (!cmd.args) && (msg !== cmd.prefix);
     if (cmd.prefix && (!hasPrefix || hasArgsAndNoExtraText || noArgsAndNotExactMatch)) {
       return;
-    } 
+    }
 
     // Check permission
     if(cmd.requiredUsers) {
@@ -110,11 +110,11 @@ class PsyBot {
         return this.reply(message, `You don't have the required permissions`);
       }
     }
-    
+
     if ((cmd.requirePermissions || cmd.requiredRole) && !message.member) {
       return this.reply(message, `You can't run this command in a private message`);
     }
-    
+
     if(cmd.requiredPermissions) {
       if (!message.member.hasPermission(cmd.requiredPermissions)) {
         return this.reply(message, `You don't have the '${cmd.requiredPermissions.toString()}' permissions`);
@@ -153,7 +153,7 @@ class PsyBot {
     } finally {
       message.channel.stopTyping(true);
     }
-    
+
     return response;
   }
 
@@ -180,9 +180,9 @@ class PsyBot {
   addEventHandlers(config) {
     Object.keys(config).forEach(event => {
       config[event].forEach(handler => {
-        this.client.on(event, (oldPresence, newPresence) => {
+        this.client.on(event, (...args) => {
           try {
-            handler.callback(this, oldPresence, newPresence)
+            handler.onEvent(this, event, args);
           } catch (e) {
             debug(`Failed to handle event: ${event}\nException: ${e}`);
           }

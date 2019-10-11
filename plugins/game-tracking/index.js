@@ -4,9 +4,11 @@ var slug = require('slug');
 
 module.exports = {
     enabled: true,
-    callback: (bot, oldPresence, newPresence) => {
+    onEvent: (bot, eventType, args) => {
+        if (eventType !== 'presenceUpdate') { return; }
+        const [ oldPresence, newPresence ] = args;
         const timestamp = (new Date()).toISOString();
-        
+
         // Only if tracking an old game.
         if (oldPresence && oldPresence.presence && oldPresence.presence.game) {
             const oldGame = slug(oldPresence.presence.game.name);
@@ -20,7 +22,7 @@ module.exports = {
         if (newPresence && newPresence.presence && newPresence.presence.game) {
             const newGame = slug(newPresence.presence.game.name);
             const newUser = slug(newPresence.displayName);
-    
+
             let starts = bot.config.get(`${newUser}.game.${newGame}.start`) || [];
             starts.push(timestamp);
             bot.config.set(`${newUser}.game.${newGame}.start`, starts);
