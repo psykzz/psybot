@@ -37,8 +37,12 @@ async function playSound(bot, msg, args) {
     let connection = await msg.member.voiceChannel.join();
     let dispatcher = await connection.playFile(soundPath);
     
-    dispatcher.on('finish', (e) => {
+    dispatcher.on('end', (e) => {
         msg.delete();
+        connection.disconnect();
+    });
+    dispatcher.on('error', (e) => {
+        msg.reply('There was an error playing that sound.');
         connection.disconnect();
     });
 }
