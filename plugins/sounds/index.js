@@ -35,7 +35,7 @@ async function playSound(bot, msg, args) {
     if (!msg.member.voiceChannel.speakable) return msg.reply(`I can't speak in that channel.`);
 
     let connection = await msg.member.voiceChannel.join();
-    let dispatcher = await connection.play(soundPath);
+    let dispatcher = await connection.playFile(soundPath);
     
     dispatcher.on('finish', (e) => {
         msg.delete();
