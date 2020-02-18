@@ -52,6 +52,7 @@ module.exports = {
     prefix: "!wowdrop",
     // !wowdrop kalei 11 ravenholdt eu
     args: true,
+    requiredRole: 'Raid Leader',
     callback: (bot, message, args) => {
         const splitArgs = args.split(' ');
         let dropPromise;
