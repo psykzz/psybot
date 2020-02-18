@@ -22,9 +22,9 @@ bot.addCommands([
   require('./plugins/server-query'),
   require('./plugins/server-query-watch'),
   require('./plugins/sounds'),
+  require('./plugins/raidbots'),
   // require('./plugins/group-helper').help,
 ]);
-
 
 bot.addEventHandlers({
   'presenceUpdate': [
