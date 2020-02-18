@@ -73,6 +73,6 @@ module.exports = {
             dropPromise = performDroptimizer(splitArgs[0], splitArgs[1], splitArgs[2], splitArgs=[3])
         }
 
-        dropPromise.then(url => bot.reply(message, url, -1));
+        dropPromise.then(url => bot.reply(message, url, -1)).catch(e => bot.reply(message, "Something went wrong, try again."));
     }
 }
