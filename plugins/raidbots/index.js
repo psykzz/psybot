@@ -11,7 +11,7 @@ const performDroptimizer = async (character, mythicLevel = '11', realm = 'ravenh
     const browser = await puppeteer.launch({ 
         headless: false, 
         executablePath: '/usr/bin/chromium-browser',
-        args: ['--disable-dev-shm-usage'] 
+        args: ['--disable-dev-shm-usage', '--no-sandbox'] 
     });
     const page = await browser.newPage();
     await page.goto('https://www.raidbots.com/auth', { waitUntil: 'networkidle2' });
