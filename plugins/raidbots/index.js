@@ -6,10 +6,13 @@ const username = process.env.RAIDBOT_USER;
 const password = process.env.RAIDBOT_PASS;
 
 const performDroptimizer = async (character, mythicLevel = '11', realm = 'ravenholdt', server = 'eu') => {
-
     mythicLevel = mythicLevel > 15 ? 15 : mythicLevel;
 
-    const browser = await puppeteer.launch({ headless: false, args: ['--disable-dev-shm-usage'] });
+    const browser = await puppeteer.launch({ 
+        headless: false, 
+        executablePath: '/usr/bin/chromium-browser',
+        args: ['--disable-dev-shm-usage'] 
+    });
     const page = await browser.newPage();
     await page.goto('https://www.raidbots.com/auth', { waitUntil: 'networkidle2' });
     await page.type('input[type=email]', username)
