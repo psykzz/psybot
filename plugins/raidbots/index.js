@@ -9,7 +9,7 @@ const performDroptimizer = async (character, mythicLevel = '11', realm = 'ravenh
     mythicLevel = mythicLevel > 15 ? 15 : mythicLevel;
 
     const browser = await puppeteer.launch({ 
-        headless: false, 
+        headless: true, 
         executablePath: '/usr/bin/chromium-browser',
         args: ['--disable-dev-shm-usage', '--no-sandbox'] 
     });
