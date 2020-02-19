@@ -57,7 +57,7 @@ module.exports = {
     args: true,
     requiredRole: 'Raid Leader',
     callback: (bot, message, args) => {
-        const splitArgs = args.split(' ');
+        const splitArgs = args.toLowerCase().split(',');
         let dropPromise;
 
         if (splitArgs.length === 1) {
