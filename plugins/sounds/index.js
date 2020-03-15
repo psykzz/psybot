@@ -38,8 +38,10 @@ async function playSound(bot, msg, args) {
     let dispatcher = await connection.playFile(soundPath);
     
     dispatcher.on('end', (e) => {
-        msg.delete();
-        connection.disconnect();
+        setTimeout(() => {
+            msg.delete();
+            connection.disconnect();
+        }, 3000);
     });
     dispatcher.on('error', (e) => {
         msg.reply('There was an error playing that sound.');
