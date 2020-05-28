@@ -18,7 +18,7 @@
     "node-opus": "^0.3.0",
     "nodemon": "^2.0.0",
     "puppeteer": "^1.19.0",
-    "slug": "^2.0.0",
+    "slug": "^3.1.0",
     "sourcequery": "^0.0.2",
     "twitter": "^1.7.0"
   }
